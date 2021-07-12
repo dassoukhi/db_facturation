@@ -20,8 +20,11 @@ def hello():
     # client = Client("dass", "50 rue de l'est", "dass@gmail.com", "0614828800", 30, "dass.com")
     # db.session.add(client)
     # db.session.commit()
-    #
-    return "re"
+    # return "re"
+
+    clients = Client.query.all()
+    print("count:",len(clients) )
+    return jsonify([c.serialize() for c in clients])
 
 
 if __name__ == '__main__':

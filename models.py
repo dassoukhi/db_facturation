@@ -80,10 +80,7 @@ class Client(db.Model):
             'created': self.created
         }
 
-articles = db.Table('articles',
-    db.Column('article_id', db.Integer, db.ForeignKey('article.id'), primary_key=True),
-    db.Column('facture_id', db.Integer, db.ForeignKey('facture.id'), primary_key=True)
-)
+
 class Facture(db.Model):
     __tablename__ = 'facture'
 
@@ -96,8 +93,8 @@ class Facture(db.Model):
     created = db.Column(db.DateTime, default=datetime.utcnow)
     client_id = db.Column(db.Integer, db.ForeignKey('client.id'),
                           nullable=False)
-    articles = db.relationship('Article', secondary=articles, lazy='subquery',
-                           backref=db.backref('factures', lazy=True))
+    articles = db.relationship('Article', backref='facture', lazy=True)
+
 
     def __init__(self, num_facture, devise, date_echeance, date_debut, description):
         self.num_facture = num_facture
@@ -130,6 +127,8 @@ class Article(db.Model):
     total = db.Column(db.Float(), nullable=False)
     taxe = db.Column(db.Float())
     created = db.Column(db.DateTime, default=datetime.utcnow)
+    facture_id = db.Column(db.Integer, db.ForeignKey('facture.id'),
+                          nullable=False)
 
     def __init__(self, description, quantite, prix, total, taxe):
         self.description = description
