@@ -1,27 +1,28 @@
 from app import db
 from datetime import datetime
 
+
 class Organisation(db.Model):
-    __tablename__ = 'organisations'
+    __tablename__ = 'organisation'
 
     id = db.Column(db.Integer, primary_key=True)
     nom = db.Column(db.String(50), nullable=False)
     adresse = db.Column(db.String())
     email = db.Column(db.String(120))
     telephone = db.Column(db.String())
-    num_enregistrement = db.Column(db.String(50))
+    num_registre = db.Column(db.String(50))
     nom_banque = db.Column(db.String(100))
     iban = db.Column(db.String())
     tva = db.Column(db.Float(3))
     site_internet = db.Column(db.String(80))
     created = db.Column(db.DateTime, default=datetime.utcnow)
 
-    def __init__(self, nom, adresse, email, telephone, num_enregistrement, nom_banque, iban, tva, site_internet):
+    def __init__(self, nom, adresse, email, telephone, num_registre, nom_banque, iban, tva, site_internet):
         self.nom = nom
         self.adresse = adresse
         self.email = email
         self.telephone = telephone
-        self.num_enregistrement = num_enregistrement
+        self.num_registre = num_registre
         self.nom_banque = nom_banque
         self.iban = iban
         self.tva = tva
@@ -37,7 +38,7 @@ class Organisation(db.Model):
             'adresse': self.adresse,
             'email': self.email,
             'telephone': self.telephone,
-            'num_enregistrement': self.num_enregistrement,
+            'num_registre': self.num_registre,
             'nom_banque': self.nom_banque,
             'iban': self.iban,
             'tva': self.tva,
@@ -45,26 +46,25 @@ class Organisation(db.Model):
             'created': self.created
         }
 
+
 class Client(db.Model):
-    __tablename__ = 'clients'
+    __tablename__ = 'client'
 
     id = db.Column(db.Integer, primary_key=True)
     nom = db.Column(db.String(50), nullable=False)
     adresse = db.Column(db.String())
     email = db.Column(db.String(120))
     telephone = db.Column(db.String())
-    tva = db.Column(db.Float())
     site_internet = db.Column(db.String(50))
     created = db.Column(db.DateTime, default=datetime.utcnow)
+    factures = db.relationship('Facture', backref='client', lazy=True)
 
     def __init__(self, nom, adresse, email, telephone, tva, site_internet):
         self.nom = nom
         self.adresse = adresse
         self.email = email
         self.telephone = telephone
-        self.tva = tva
         self.site_internet = site_internet
-
 
     def __repr__(self):
         return '<id {}>'.format(self.id)
@@ -72,11 +72,81 @@ class Client(db.Model):
     def serialize(self):
         return {
             'id': self.id,
-            'nom':  self.nom,
-            'adresse':  self.adresse,
+            'nom': self.nom,
+            'adresse': self.adresse,
             'email': self.email,
             'telephone': self.telephone,
-            'tva': self.tva,
             'site_internet': self.site_internet,
+            'created': self.created
+        }
+
+articles = db.Table('articles',
+    db.Column('article_id', db.Integer, db.ForeignKey('article.id'), primary_key=True),
+    db.Column('facture_id', db.Integer, db.ForeignKey('facture.id'), primary_key=True)
+)
+class Facture(db.Model):
+    __tablename__ = 'facture'
+
+    id = db.Column(db.Integer, primary_key=True)
+    num_facture = db.Column(db.String(20), nullable=False)
+    devise = db.Column(db.String(10))
+    date_echeance = db.Column(db.DateTime, default=datetime.utcnow)
+    date_debut = db.Column(db.DateTime, default=datetime.utcnow)
+    description = db.Column(db.Text())
+    created = db.Column(db.DateTime, default=datetime.utcnow)
+    client_id = db.Column(db.Integer, db.ForeignKey('client.id'),
+                          nullable=False)
+    articles = db.relationship('Article', secondary=articles, lazy='subquery',
+                           backref=db.backref('factures', lazy=True))
+
+    def __init__(self, num_facture, devise, date_echeance, date_debut, description):
+        self.num_facture = num_facture
+        self.devise = devise
+        self.date_echeance = date_echeance
+        self.date_debut = date_debut
+        self.description = description
+
+    def __repr__(self):
+        return '<id {}>'.format(self.id)
+
+    def serialize(self):
+        return {
+            'id': self.id,
+            'num_facture': self.num_facture,
+            'devise': self.devise,
+            'date_echeance': self.date_echeance,
+            'date_debut': self.date_debut,
+            'description': self.description,
+            'created': self.created
+        }
+
+class Article(db.Model):
+    __tablename__ = 'article'
+
+    id = db.Column(db.Integer, primary_key=True)
+    description = db.Column(db.String(80), nullable=False)
+    quantite = db.Column(db.Integer, nullable=False)
+    prix = db.Column(db.Float(), nullable=False)
+    total = db.Column(db.Float(), nullable=False)
+    taxe = db.Column(db.Float())
+    created = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def __init__(self, description, quantite, prix, total, taxe):
+        self.description = description
+        self.quantite = quantite
+        self.prix = prix
+        self.total = total
+        self.taxe = taxe
+
+    def __repr__(self):
+        return '<id {}>'.format(self.id)
+
+    def serialize(self):
+        return {
+            'id': self.id,
+            'description': self.description,
+            'prix': self.prix,
+            'total': self.total,
+            'taxe': self.taxe,
             'created': self.created
         }

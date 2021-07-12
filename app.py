@@ -15,15 +15,13 @@ migrate = Migrate(app, db)
 from models import *
 
 
-
 @app.route("/")
 def hello():
-    #client = Client("dass", "50 rue de l'est", "dass@gmail.com", "0614828800", 30, "dass.com")
-    #db.session.add(client)
-    #db.session.commit()
-    clients = Client.query.all()
-    print("count:",len(clients) )
-    return jsonify([c.serialize() for c in clients])
+    # client = Client("dass", "50 rue de l'est", "dass@gmail.com", "0614828800", 30, "dass.com")
+    # db.session.add(client)
+    # db.session.commit()
+    #
+    return "re"
 
 
 if __name__ == '__main__':
