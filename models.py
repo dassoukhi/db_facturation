@@ -16,6 +16,8 @@ class Organisation(db.Model):
     tva = db.Column(db.Float(3))
     site_internet = db.Column(db.String(80))
     created = db.Column(db.DateTime, default=datetime.utcnow)
+    factures = db.relationship('Facture', backref='organisation', lazy=True)
+    clients = db.relationship('Client', backref='organisation', lazy=True)
 
     def __init__(self, nom, adresse, email, telephone, num_registre, nom_banque, iban, tva, site_internet):
         self.nom = nom
@@ -57,9 +59,10 @@ class Client(db.Model):
     telephone = db.Column(db.String())
     site_internet = db.Column(db.String(50))
     created = db.Column(db.DateTime, default=datetime.utcnow)
+    organisation_id = db.Column(db.Integer, db.ForeignKey('organisation.id'))
     factures = db.relationship('Facture', backref='client', lazy=True)
 
-    def __init__(self, nom, adresse, email, telephone, tva, site_internet):
+    def __init__(self, nom, adresse, email, telephone, site_internet):
         self.nom = nom
         self.adresse = adresse
         self.email = email
@@ -93,15 +96,19 @@ class Facture(db.Model):
     created = db.Column(db.DateTime, default=datetime.utcnow)
     client_id = db.Column(db.Integer, db.ForeignKey('client.id'),
                           nullable=False)
+    organisation_id = db.Column(db.Integer, db.ForeignKey('organisation.id'),
+                          nullable=False)
     articles = db.relationship('Article', backref='facture', lazy=True)
 
 
-    def __init__(self, num_facture, devise, date_echeance, date_debut, description):
+    def __init__(self, num_facture, devise, date_echeance, date_debut, description, client_id, organisation_id):
         self.num_facture = num_facture
         self.devise = devise
         self.date_echeance = date_echeance
         self.date_debut = date_debut
         self.description = description
+        self.client_id = client_id
+        self.organisation_id = organisation_id
 
     def __repr__(self):
         return '<id {}>'.format(self.id)
@@ -127,8 +134,7 @@ class Article(db.Model):
     total = db.Column(db.Float(), nullable=False)
     taxe = db.Column(db.Float())
     created = db.Column(db.DateTime, default=datetime.utcnow)
-    facture_id = db.Column(db.Integer, db.ForeignKey('facture.id'),
-                          nullable=False)
+    facture_id = db.Column(db.Integer, db.ForeignKey('facture.id'))
 
     def __init__(self, description, quantite, prix, total, taxe):
         self.description = description
@@ -145,6 +151,7 @@ class Article(db.Model):
             'id': self.id,
             'description': self.description,
             'prix': self.prix,
+            'quantite': self.quantite,
             'total': self.total,
             'taxe': self.taxe,
             'created': self.created
