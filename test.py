@@ -1,3 +1,4 @@
 import os
-print(os.environ["DATABASE_URL"])
-print(os.environ["APP_SETTINGS"])
+from dotenv import load_dotenv
+load_dotenv()
+print(os.environ.get("TEST"))
