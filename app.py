@@ -1,4 +1,3 @@
-import os
 from flask import Flask, request, jsonify, make_response
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
@@ -12,7 +11,7 @@ app.secret_key = 'secret string'
 db = SQLAlchemy(app)
 
 migrate = Migrate(app, db)
-from models import *
+from ressources.modules.models import *
 
 
 @app.route("/")
@@ -343,7 +342,7 @@ def getArticles():
 
 
             article = Article(description, quantite, prix, total, taxe)
-            article.facture_id = 3
+            article.facture_id = 1
 
             try:
                 db.session.add(article)
