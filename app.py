@@ -7,10 +7,9 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = Flask(__name__)
-
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL'].replace("://", "ql://", 1)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['DEBUG'] = True
+# app.config['DEBUG'] = True
 app.secret_key = os.environ['SECRET_KEY']
 app.config["CORS_HEADERS"] = "Content-Type"
 db = SQLAlchemy(app)
