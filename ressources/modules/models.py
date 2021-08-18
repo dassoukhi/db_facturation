@@ -1,6 +1,8 @@
 from app import db
 from datetime import datetime
 
+assert isinstance(db.Model, object)
+
 
 class Organisation(db.Model):
     __tablename__ = 'organisation'
@@ -45,7 +47,9 @@ class Organisation(db.Model):
             'iban': self.iban,
             'tva': self.tva,
             'site_internet': self.site_internet,
-            'created': self.created
+            'created': self.created,
+            'clients': [c.serialize() for c in self.clients],
+            'factures': [f.serialize() for f in self.factures]
         }
 
 
@@ -80,7 +84,8 @@ class Client(db.Model):
             'email': self.email,
             'telephone': self.telephone,
             'site_internet': self.site_internet,
-            'created': self.created
+            'created': self.created,
+            'factures': [f.serialize() for f in self.factures]
         }
 
 
@@ -121,7 +126,8 @@ class Facture(db.Model):
             'date_echeance': self.date_echeance,
             'date_debut': self.date_debut,
             'description': self.description,
-            'created': self.created
+            'created': self.created,
+            'articles': [a.serialize() for a in self.articles]
         }
 
 class Article(db.Model):

@@ -1,26 +1,45 @@
+import os
 from flask import Flask, request, jsonify, make_response
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
+from  flask_cors import CORS, cross_origin
+from dotenv import load_dotenv
+load_dotenv()
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:admin@localhost/facturation'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['DEBUG'] = True
-app.secret_key = 'secret string'
+app.secret_key = os.environ['SECRET_KEY']
+app.config["CORS_HEADERS"] = "Content-Type"
 db = SQLAlchemy(app)
+
+CORS(app)
+
+
 
 migrate = Migrate(app, db)
 from ressources.modules.models import *
 
+@app.teardown_request
+def checkin_db(exc):
+    try:
+        print("Removing db session.")
+        db.session.remove()
+    except AttributeError:
+        pass
+
+
 
 @app.route("/")
+@cross_origin()
 def index():
     return jsonify()
 
 
 @app.route("/organisations", methods=['GET', 'POST'])
-def getOrganisations():
+def getOrganisations():  # sourcery no-metrics
     if request.method == "GET":
         organs = Organisation.query.all()
         print("count:", len(organs))
@@ -125,6 +144,7 @@ def organisation(organisation_id):
 
 
 @app.route("/clients", methods=['GET', 'POST'])
+@cross_origin()
 def getClients():
     if request.method == "GET":
         clients = Client.query.all()
