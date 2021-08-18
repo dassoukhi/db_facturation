@@ -372,8 +372,10 @@ def getArticles():
             if 'taxe' in request_data:
                 taxe = request_data['taxe']
 
-            article = Article(description, quantite, prix, total, taxe)
-            article.facture_id = 1
+            if 'facture_id' in request_data:
+                facture_id = request_data['facture_id']
+
+            article = Article(description, quantite, prix, total, taxe, facture_id)
 
             try:
                 db.session.add(article)
