@@ -374,8 +374,10 @@ def getArticles():
 
             if 'facture_id' in request_data:
                 facture_id = request_data['facture_id']
-
-            article = Article(description, quantite, prix, total, taxe, facture_id)
+            else:
+                make_response(jsonify({"error": "Attribut facture_id required"}), 404)
+            article = Article(description, quantite, prix, total, taxe)
+            article.facture_id = facture_id
 
             try:
                 db.session.add(article)
