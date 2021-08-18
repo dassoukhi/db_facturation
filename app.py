@@ -4,6 +4,7 @@ from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from  flask_cors import CORS, cross_origin
 from dotenv import load_dotenv
+from .commands import create_tables
 load_dotenv()
 
 app = Flask(__name__)
@@ -13,6 +14,8 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = os.environ['SECRET_KEY']
 app.config["CORS_HEADERS"] = "Content-Type"
 db = SQLAlchemy(app)
+
+app.cli.add_command(create_tables)
 
 CORS(app)
 
