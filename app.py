@@ -2,9 +2,11 @@ import os
 from flask import Flask, request, jsonify, make_response
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
-from  flask_cors import CORS, cross_origin
+from flask_cors import CORS, cross_origin
 from dotenv import load_dotenv
-from .commands import create_tables
+import click
+from flask.cli import with_appcontext
+
 load_dotenv()
 
 app = Flask(__name__)
@@ -15,14 +17,21 @@ app.secret_key = os.environ['SECRET_KEY']
 app.config["CORS_HEADERS"] = "Content-Type"
 db = SQLAlchemy(app)
 
-app.cli.add_command(create_tables)
-
 CORS(app)
 
 
+@click.command(name='create_tables')
+@with_appcontext
+def create_tables():
+    db.create_all()
+    print("create")
+
+
+app.cli.add_command(create_tables)
 
 migrate = Migrate(app, db)
 from ressources.modules.models import *
+
 
 @app.teardown_request
 def checkin_db(exc):
@@ -31,7 +40,6 @@ def checkin_db(exc):
         db.session.remove()
     except AttributeError:
         pass
-
 
 
 @app.route("/")
@@ -212,7 +220,7 @@ def client(client_id):
 
             if 'site_internet' in request_data:
                 site_internet = request_data['site_internet']
-            client.nom, client.adresse, client.email, client.telephone,  client.site_internet = nom, adresse, email, telephone, site_internet
+            client.nom, client.adresse, client.email, client.telephone, client.site_internet = nom, adresse, email, telephone, site_internet
             try:
                 db.session.commit()
                 return jsonify(client.serialize())
@@ -282,6 +290,7 @@ def getFactures():
                 return make_response(jsonify({"error": "insertion failed"}), 404)
         return make_response(jsonify({"error": "Data not found"}), 404)
 
+
 @app.route("/factures/<int:facture_id>", methods=['GET', 'PUT', 'DELETE'])
 def facture(facture_id):
     if request.method == "GET":
@@ -327,12 +336,13 @@ def facture(facture_id):
             return make_response(jsonify({"error": "DELETE failed"}), 404)
         return make_response(jsonify({"status": "success"}), 204)
 
+
 @app.route("/articles", methods=['GET', 'POST'])
 def getArticles():
     if request.method == "GET":
         articles = Article.query.all()
-        print("count:", len(    articles))
-        return jsonify([c.serialize() for c in  articles])
+        print("count:", len(articles))
+        return jsonify([c.serialize() for c in articles])
     if request.method == "POST":
         request_data = request.get_json()
         description, quantite, prix, total, taxe = None, None, None, None, None
@@ -362,7 +372,6 @@ def getArticles():
             if 'taxe' in request_data:
                 taxe = request_data['taxe']
 
-
             article = Article(description, quantite, prix, total, taxe)
             article.facture_id = 1
 
@@ -374,6 +383,7 @@ def getArticles():
                 print(str(e))
                 return make_response(jsonify({"error": "insertion failed"}), 404)
         return make_response(jsonify({"error": "Data not found"}), 404)
+
 
 @app.route("/articles/<int:facture_id>", methods=['GET', 'PUT', 'DELETE'])
 def articles(article_id):
@@ -401,7 +411,7 @@ def articles(article_id):
 
             if 'taxe' in request_data:
                 taxe = request_data['taxe']
-            article.description, article.quantite, article.prix, article.total,  article.taxe = description, quantite, prix, total, taxe
+            article.description, article.quantite, article.prix, article.total, article.taxe = description, quantite, prix, total, taxe
             try:
                 db.session.commit()
                 return jsonify(article.serialize())
@@ -420,7 +430,8 @@ def articles(article_id):
             return make_response(jsonify({"error": "DELETE failed"}), 404)
         return make_response(jsonify({"status": "success"}), 204)
 
+
 if __name__ == '__main__':
-    db.create_all()
-    print("create")
+    # db.create_all()
+    # print("create")
     app.run()
