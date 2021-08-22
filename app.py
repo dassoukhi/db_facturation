@@ -71,6 +71,11 @@ def getOrganisations():  # sourcery no-metrics
             if 'email' in request_data:
                 email = request_data['email']
 
+            if 'password' in request_data:
+                password = request_data['password']
+            else:
+                make_response(jsonify({"error": "Attribut nom required"}), 404)
+
             if 'telephone' in request_data:
                 telephone = request_data['telephone']
 
@@ -119,6 +124,11 @@ def organisation(organisation_id):
 
             if 'email' in request_data:
                 email = request_data['email']
+
+            if 'password' in request_data:
+                password = request_data['password']
+            else:
+                make_response(jsonify({"error": "Attribut nom required"}), 404)
 
             if 'telephone' in request_data:
                 telephone = request_data['telephone']
