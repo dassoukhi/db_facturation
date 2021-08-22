@@ -21,7 +21,8 @@ clients = [
         "id": 1,
         "nom": "clien1",
         "site_internet": "test.td",
-        "telephone": "6612443344"
+        "telephone": "6612443344",
+        "organisation_id": 1
     },
     {
         "adresse": "12 Avenue de charles de Gaule",
@@ -30,7 +31,8 @@ clients = [
         "id": 2,
         "nom": "clien2",
         "site_internet": "client1.td",
-        "telephone": "6612443344"
+        "telephone": "6612443344",
+        "organisation_id": 1
     },
     {
         "adresse": "12 Avenue de charles de Gaule",
@@ -39,7 +41,8 @@ clients = [
         "id": 3,
         "nom": "clien3",
         "site_internet": "client3.td",
-        "telephone": "6612443344"
+        "telephone": "6612443344",
+        "organisation_id": 1
     }
 ]
 

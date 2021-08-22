@@ -172,7 +172,7 @@ def getClients():
         return jsonify([c.serialize() for c in clients])
     if request.method == "POST":
         request_data = request.get_json()
-        nom, adresse, email, telephone, site_internet = None, None, None, None, None
+        nom, adresse, email, telephone, site_internet, organisation_id = None, None, None, None, None, None
         print(nom, adresse, email, telephone, site_internet, 1)
         print(request_data)
         if request_data:
@@ -192,8 +192,12 @@ def getClients():
 
             if 'site_internet' in request_data:
                 site_internet = request_data['site_internet']
+            if 'organisation_id' in request_data:
+                organisation_id = request_data['organisation_id']
+            else:
+                make_response(jsonify({"error": "Attribut organisation_id required"}), 404)
             client = Client(nom, adresse, email, telephone, site_internet)
-            client.organisation_id = 1
+            client.organisation_id = int(organisation_id)
             try:
                 db.session.add(client)
                 db.session.commit()
