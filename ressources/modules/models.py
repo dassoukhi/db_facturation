@@ -11,7 +11,7 @@ class Organisation(db.Model):
     nom = db.Column(db.String(50), nullable=False)
     adresse = db.Column(db.String())
     email = db.Column(db.String(120))
-    password = db.Column(db.String())
+    password = db.Column(db.String(), nullable=False)
     telephone = db.Column(db.String())
     num_registre = db.Column(db.String(50))
     nom_banque = db.Column(db.String(100))

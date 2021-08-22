@@ -10,7 +10,7 @@ from flask.cli import with_appcontext
 load_dotenv()
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL'].replace("://", "ql://", 1)
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # app.config['DEBUG'] = True
 app.secret_key = os.environ['SECRET_KEY']
@@ -56,8 +56,8 @@ def getOrganisations():  # sourcery no-metrics
         return jsonify([c.serialize() for c in organs])
     if request.method == "POST":
         request_data = request.get_json()
-        nom, adresse, email, telephone, num_registre, nom_banque, iban, tva, site_internet = None, None, None, None, None, None, None, None, None
-        print(nom, adresse, email, telephone, num_registre, nom_banque, iban, tva, site_internet)
+        nom, adresse, email, password, telephone, num_registre, nom_banque, iban, tva, site_internet = None, None, None, None, None, None, None, None, None, None
+        print(nom, adresse, email,password, telephone, num_registre, nom_banque, iban, tva, site_internet)
         print(request_data)
         if request_data:
             if 'nom' in request_data:
@@ -88,7 +88,7 @@ def getOrganisations():  # sourcery no-metrics
 
             if 'site_internet' in request_data:
                 site_internet = request_data['site_internet']
-            organ = Organisation(nom, adresse, email, telephone, num_registre, nom_banque, iban, tva, site_internet)
+            organ = Organisation(nom, adresse, email,password, telephone, num_registre, nom_banque, iban, tva, site_internet)
             try:
                 db.session.add(organ)
                 db.session.commit()
