@@ -2,6 +2,7 @@ organisation =  {
         "adresse": "12 Avenue de charles de Gaule",
         "created": "Tue, 13 Jul 2021 12:42:03 GMT",
         "email": "client1@gmail.com",
+        "password": "123456",
         "iban": "FA2315643456345",
         "id": 1,
         "nom": "clien1",

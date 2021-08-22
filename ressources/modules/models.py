@@ -11,6 +11,7 @@ class Organisation(db.Model):
     nom = db.Column(db.String(50), nullable=False)
     adresse = db.Column(db.String())
     email = db.Column(db.String(120))
+    password = db.Column(db.String())
     telephone = db.Column(db.String())
     num_registre = db.Column(db.String(50))
     nom_banque = db.Column(db.String(100))
@@ -21,10 +22,11 @@ class Organisation(db.Model):
     factures = db.relationship('Facture', backref='organisation', lazy=True)
     clients = db.relationship('Client', backref='organisation', lazy=True)
 
-    def __init__(self, nom, adresse, email, telephone, num_registre, nom_banque, iban, tva, site_internet):
+    def __init__(self, nom, adresse, email, password,telephone, num_registre, nom_banque, iban, tva, site_internet):
         self.nom = nom
         self.adresse = adresse
         self.email = email
+        self.password = password
         self.telephone = telephone
         self.num_registre = num_registre
         self.nom_banque = nom_banque
@@ -41,6 +43,7 @@ class Organisation(db.Model):
             'nom': self.nom,
             'adresse': self.adresse,
             'email': self.email,
+            'password': self.password,
             'telephone': self.telephone,
             'num_registre': self.num_registre,
             'nom_banque': self.nom_banque,
