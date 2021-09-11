@@ -22,7 +22,7 @@ class Organisation(db.Model):
     factures = db.relationship('Facture', backref='organisation', lazy=True)
     clients = db.relationship('Client', backref='organisation', lazy=True)
 
-    def __init__(self, nom, adresse, email, password,telephone, num_registre, nom_banque, iban, tva, site_internet):
+    def __init__(self, nom, adresse, email, password,telephone="", site_internet="", num_registre="", nom_banque="", iban="", tva=0.0):
         self.nom = nom
         self.adresse = adresse
         self.email = email
