@@ -6,6 +6,7 @@ from flask_cors import CORS, cross_origin
 from dotenv import load_dotenv
 import click
 from flask.cli import with_appcontext
+from werkzeug.security import check_password_hash, generate_password_hash
 
 load_dotenv()
 
@@ -57,7 +58,7 @@ def getOrganisations():  # sourcery no-metrics
     if request.method == "POST":
         request_data = request.get_json()
         nom, adresse, email, password, telephone, num_registre, nom_banque, iban, tva, site_internet = None, None, None, None, None, None, None, None, None, None
-        print(nom, adresse, email,password, telephone, num_registre, nom_banque, iban, tva, site_internet)
+        print(nom, adresse, email, password, telephone, num_registre, nom_banque, iban, tva, site_internet)
         print(request_data)
         if request_data:
             if 'nom' in request_data:
@@ -93,7 +94,8 @@ def getOrganisations():  # sourcery no-metrics
 
             if 'site_internet' in request_data:
                 site_internet = request_data['site_internet']
-            organ = Organisation(nom, adresse, email,password, telephone, num_registre, nom_banque, iban, tva, site_internet)
+            organ = Organisation(nom, adresse, email, password, telephone, num_registre, nom_banque, iban, tva,
+                                 site_internet)
             try:
                 db.session.add(organ)
                 db.session.commit()
@@ -161,6 +163,87 @@ def organisation(organisation_id):
         db.session.delete(organ)
         db.session.commit()
         return make_response(jsonify({"status": "success"}), 204)
+
+
+@app.route("/organisations/login", methods=['POST'])
+def login():  # sourcery no-metrics
+
+    request_data = request.get_json()
+    if request_data:
+        email = ''
+        password = ''
+        if 'email' in request_data:
+            email = request_data['email']
+        else:
+            make_response(jsonify({"error": "Attribut email required"}), 404)
+
+        if 'password' in request_data:
+            password = request_data['password']
+        else:
+            make_response(jsonify({"error": "Attribut password required"}), 404)
+
+        try:
+            organ = Organisation.query.filter_by(email=email).first()
+            if not organ or not check_password_hash(organ.password, password):
+                make_response(jsonify({"error": "Data not found"}), 404)
+            return jsonify(organ.serialize())
+        except AssertionError as e:
+            print(str(e))
+            return make_response(jsonify({"error": "Authentification failed"}), 404)
+    return make_response(jsonify({"error": "Data not found"}), 404)
+
+
+@app.route("/organisations/register", methods=['POST'])
+def register():  # sourcery no-metrics
+
+    request_data = request.get_json()
+    if request_data:
+        email = ''
+        password = ''
+        nom = ''
+        adresse = ''
+        telephone = ''
+        site_internet = ''
+
+        if 'nom' in request_data:
+            nom = request_data['nom']
+        else:
+            make_response(jsonify({"error": "Attribut name required"}), 404)
+
+        if 'email' in request_data:
+            email = request_data['email']
+        else:
+            make_response(jsonify({"error": "Attribut email required"}), 404)
+
+        if 'adresse' in request_data:
+            adresse = request_data['adresse']
+        else:
+            make_response(jsonify({"error": "Attribut email required"}), 404)
+
+        if 'password' in request_data:
+            password = request_data['password']
+        else:
+            make_response(jsonify({"error": "Attribut password required"}), 404)
+
+        if 'telephone' in request_data:
+            telephone = request_data['telephone']
+
+        if 'site_internet' in request_data:
+            site_internet = request_data['site_internet']
+
+        try:
+            organ = Organisation.query.filter_by(email=email).first()
+            if organ:
+                make_response(jsonify({"error": "Email already exist"}), 404)
+            new_organ = Organisation(nom=nom, email=email, adresse=adresse, telephone=telephone,
+                                     site_internet=site_internet, password=generate_password_hash(password, method='sha256'))
+            db.session.add(new_organ)
+            db.session.commit()
+            return jsonify(new_organ.serialize())
+        except AssertionError as e:
+            print(str(e))
+            return make_response(jsonify({"error": "Authentification failed"}), 404)
+    return make_response(jsonify({"error": "Data not found"}), 404)
 
 
 @app.route("/clients", methods=['GET', 'POST'])
@@ -359,7 +442,7 @@ def getArticles():
         return jsonify([c.serialize() for c in articles])
     if request.method == "POST":
         request_data = request.get_json()
-        description, quantite, prix, total, taxe = None, None, None, None, None
+        description, quantite, prix, total, taxe, facture_id = None, None, None, None, None
         print(description, quantite, prix, total, taxe)
         print(request_data)
         if request_data:

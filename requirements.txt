@@ -1,3 +1,4 @@
+werkzeug
 Flask
 flask_migrate
 flask_sqlalchemy
