@@ -149,7 +149,7 @@ def organisation(organisation_id):
 
             if 'site_internet' in request_data:
                 site_internet = request_data['site_internet']
-            organ.nom, organ.adresse, organ.email, organ.telephone, organ.num_registre, organ.nom_banque, organ.iban, organ.tva, organ.site_internet = nom, adresse, email, telephone, num_registre, nom_banque, iban, tva, site_internet
+            organ.nom, organ.adresse, organ.email, organ.telephone, organ.num_registre, organ.nom_banque, organ.iban, organ.tva, organ.site_internet, organ.password = nom, adresse, email, telephone, num_registre, nom_banque, iban, tva, site_internet, password
             try:
                 db.session.commit()
                 return jsonify(organ.serialize())
