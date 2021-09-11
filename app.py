@@ -175,17 +175,17 @@ def login():  # sourcery no-metrics
         if 'email' in request_data:
             email = request_data['email']
         else:
-            make_response(jsonify({"error": "Attribut email required"}), 404)
+            return make_response(jsonify({"error": "Attribut email required"}), 404)
 
         if 'password' in request_data:
             password = request_data['password']
         else:
-            make_response(jsonify({"error": "Attribut password required"}), 404)
+            return make_response(jsonify({"error": "Attribut password required"}), 404)
 
         try:
             organ = Organisation.query.filter_by(email=email).first()
             if not organ or not check_password_hash(organ.password, password):
-                make_response(jsonify({"error": "Data not found"}), 404)
+                return make_response(jsonify({"error": "email or password incorrect"}), 404)
             return jsonify(organ.serialize())
         except AssertionError as e:
             print(str(e))
@@ -208,22 +208,22 @@ def register():  # sourcery no-metrics
         if 'nom' in request_data:
             nom = request_data['nom']
         else:
-            make_response(jsonify({"error": "Attribut name required"}), 404)
+            return return make_response(jsonify({"error": "Attribut name required"}), 404)
 
         if 'email' in request_data:
             email = request_data['email']
         else:
-            make_response(jsonify({"error": "Attribut email required"}), 404)
+            return make_response(jsonify({"error": "Attribut email required"}), 404)
 
         if 'adresse' in request_data:
             adresse = request_data['adresse']
         else:
-            make_response(jsonify({"error": "Attribut email required"}), 404)
+            return make_response(jsonify({"error": "Attribut email required"}), 404)
 
         if 'password' in request_data:
             password = request_data['password']
         else:
-            make_response(jsonify({"error": "Attribut password required"}), 404)
+            return make_response(jsonify({"error": "Attribut password required"}), 404)
 
         if 'telephone' in request_data:
             telephone = request_data['telephone']
@@ -234,7 +234,7 @@ def register():  # sourcery no-metrics
         try:
             organ = Organisation.query.filter_by(email=email).first()
             if organ:
-                make_response(jsonify({"error": "Email already exist"}), 404)
+                return make_response(jsonify({"error": "Email already exist"}), 404)
             new_organ = Organisation(nom=nom, email=email, adresse=adresse, telephone=telephone,
                                      site_internet=site_internet, password=generate_password_hash(password, method='sha256'))
             db.session.add(new_organ)
