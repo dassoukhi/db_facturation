@@ -208,7 +208,7 @@ def register():  # sourcery no-metrics
         if 'nom' in request_data:
             nom = request_data['nom']
         else:
-            return return make_response(jsonify({"error": "Attribut name required"}), 404)
+            return make_response(jsonify({"error": "Attribut name required"}), 404)
 
         if 'email' in request_data:
             email = request_data['email']
