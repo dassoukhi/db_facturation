@@ -262,7 +262,7 @@ def getClients():
             if 'nom' in request_data:
                 nom = request_data['nom']
             else:
-                make_response(jsonify({"error": "Attribut nom required"}), 404)
+                return make_response(jsonify({"error": "Attribut nom required"}), 404)
 
             if 'adresse' in request_data:
                 adresse = request_data['adresse']
@@ -278,7 +278,7 @@ def getClients():
             if 'organisation_id' in request_data:
                 organisation_id = request_data['organisation_id']
             else:
-                make_response(jsonify({"error": "Attribut organisation_id required"}), 404)
+                return make_response(jsonify({"error": "Attribut organisation_id required"}), 404)
             client = Client(nom, adresse, email, telephone, site_internet)
             client.organisation_id = int(organisation_id)
             try:
@@ -304,7 +304,7 @@ def client(client_id):
             if 'nom' in request_data:
                 nom = request_data['nom']
             else:
-                make_response(jsonify({"error": "Attribut nom required"}), 404)
+                return make_response(jsonify({"error": "Attribut nom required"}), 404)
 
             if 'adresse' in request_data:
                 adresse = request_data['adresse']
@@ -352,7 +352,7 @@ def getFactures():
             if 'num_facture' in request_data:
                 num_facture = request_data['num_facture']
             else:
-                make_response(jsonify({"error": "Attribut nom required"}), 404)
+                return make_response(jsonify({"error": "Attribut nom required"}), 404)
 
             if 'devise' in request_data:
                 devise = request_data['devise']
@@ -369,12 +369,12 @@ def getFactures():
             if 'client_id' in request_data:
                 client_id = request_data['client_id']
             else:
-                make_response(jsonify({"error": "Attribut client_id required"}), 404)
+                return make_response(jsonify({"error": "Attribut client_id required"}), 404)
 
             if 'organisation_id' in request_data:
                 organisation_id = request_data['organisation_id']
             else:
-                make_response(jsonify({"error": "Attribut organisation_id required"}), 404)
+                return make_response(jsonify({"error": "Attribut organisation_id required"}), 404)
 
             facture = Facture(num_facture, devise, date_echeance, date_debut, description, client_id, organisation_id)
 
@@ -401,7 +401,7 @@ def facture(facture_id):
             if 'num_facture' in request_data:
                 num_facture = request_data['num_facture']
             else:
-                make_response(jsonify({"error": "Attribut nom required"}), 404)
+                return make_response(jsonify({"error": "Attribut nom required"}), 404)
 
             if 'devise' in request_data:
                 devise = request_data['devise']
@@ -449,22 +449,22 @@ def getArticles():
             if 'description' in request_data:
                 description = request_data['description']
             else:
-                make_response(jsonify({"error": "Attribut nom required"}), 404)
+                return make_response(jsonify({"error": "Attribut nom required"}), 404)
 
             if 'quantite' in request_data:
                 quantite = request_data['quantite']
             else:
-                make_response(jsonify({"error": "Attribut quantité required"}), 404)
+                return make_response(jsonify({"error": "Attribut quantité required"}), 404)
 
             if 'prix' in request_data:
                 prix = request_data['prix']
             else:
-                make_response(jsonify({"error": "Attribut prix required"}), 404)
+                return make_response(jsonify({"error": "Attribut prix required"}), 404)
 
             if 'total' in request_data:
                 total = request_data['total']
             else:
-                make_response(jsonify({"error": "Attribut total prix required"}), 404)
+                return make_response(jsonify({"error": "Attribut total prix required"}), 404)
 
             if 'taxe' in request_data:
                 taxe = request_data['taxe']
@@ -472,7 +472,7 @@ def getArticles():
             if 'facture_id' in request_data:
                 facture_id = request_data['facture_id']
             else:
-                make_response(jsonify({"error": "Attribut facture_id required"}), 404)
+                return make_response(jsonify({"error": "Attribut facture_id required"}), 404)
             article = Article(description, quantite, prix, total, taxe)
             article.facture_id = facture_id
 
@@ -499,7 +499,7 @@ def articles(article_id):
             if 'description' in request_data:
                 description = request_data['description']
             else:
-                make_response(jsonify({"error": "Attribut description required"}), 404)
+                return make_response(jsonify({"error": "Attribut description required"}), 404)
 
             if 'quantite' in request_data:
                 quantite = request_data['quantite']
