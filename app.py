@@ -201,10 +201,6 @@ def register():  # sourcery no-metrics
         email = ''
         password = ''
         nom = ''
-        adresse = ''
-        telephone = ''
-        site_internet = ''
-
         if 'nom' in request_data:
             nom = request_data['nom']
         else:
@@ -215,28 +211,17 @@ def register():  # sourcery no-metrics
         else:
             return make_response(jsonify({"error": "Attribut email required"}), 404)
 
-        if 'adresse' in request_data:
-            adresse = request_data['adresse']
-        else:
-            return make_response(jsonify({"error": "Attribut email required"}), 404)
-
         if 'password' in request_data:
             password = request_data['password']
         else:
             return make_response(jsonify({"error": "Attribut password required"}), 404)
 
-        if 'telephone' in request_data:
-            telephone = request_data['telephone']
-
-        if 'site_internet' in request_data:
-            site_internet = request_data['site_internet']
 
         try:
             organ = Organisation.query.filter_by(email=email).first()
             if organ:
                 return make_response(jsonify({"error": "Email already exist"}), 404)
-            new_organ = Organisation(nom=nom, email=email, adresse=adresse, telephone=telephone,
-                                     site_internet=site_internet, password=generate_password_hash(password, method='sha256'))
+            new_organ = Organisation(nom=nom, email=email, password=generate_password_hash(password, method='sha256'))
             db.session.add(new_organ)
             db.session.commit()
             return jsonify(new_organ.serialize())
