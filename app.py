@@ -185,7 +185,7 @@ def login():  # sourcery no-metrics
         try:
             organ = Organisation.query.filter_by(email=email).first()
             if not organ or not check_password_hash(organ.password, password):
-                return make_response(jsonify({"error": "email or password incorrect"}), 404)
+                return make_response(jsonify({"error": "email or password incorrect"}), 400)
             return jsonify(organ.serialize())
         except AssertionError as e:
             print(str(e))
@@ -220,7 +220,7 @@ def register():  # sourcery no-metrics
         try:
             organ = Organisation.query.filter_by(email=email).first()
             if organ:
-                return make_response(jsonify({"error": "Email already exist"}), 404)
+                return make_response(jsonify({"error": "Email already exist"}), 302)
             new_organ = Organisation(nom=nom, email=email, password=generate_password_hash(password, method='sha256'))
             db.session.add(new_organ)
             db.session.commit()
