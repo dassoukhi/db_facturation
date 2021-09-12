@@ -225,8 +225,7 @@ def register():  # sourcery no-metrics
             new_organ = Organisation(nom=nom, email=email, password=generate_password_hash(password, method='sha256'))
             db.session.add(new_organ)
             db.session.commit()
-            user = {"email": organ.email, "name": organ.nom, "siteWeb": organ.site_internet,
-                    "phone": organ.telephone, "adress": organ.adresse}
+            user = {"email": organ.email, "name": organ.nom}
             return jsonify(user)
         except AssertionError as e:
             print(str(e))
