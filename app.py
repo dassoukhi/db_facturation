@@ -186,7 +186,8 @@ def login():  # sourcery no-metrics
             organ = Organisation.query.filter_by(email=email).first()
             if not organ or not check_password_hash(organ.password, password):
                 return make_response(jsonify({"error": "Email et/ou mot de passe incorrect(s)"}), 400)
-            return jsonify(organ.serialize())
+            user = {"id": organ.id,"email": organ.email, "name": organ.nom, "siteWeb": organ.site_internet, "phone": organ.telephone, "adress": organ.adresse}
+            return jsonify(user)
         except AssertionError as e:
             print(str(e))
             return make_response(jsonify({"error": "Authentification failed"}), 404)
