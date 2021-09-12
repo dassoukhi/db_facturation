@@ -220,7 +220,7 @@ def register():  # sourcery no-metrics
         try:
             organ = Organisation.query.filter_by(email=email).first()
             if organ:
-                return make_response(jsonify({"error": "Email existe déjà"}), 302)
+                return make_response(jsonify({"error": "Email existe déjà"}), 400)
             new_organ = Organisation(nom=nom, email=email, password=generate_password_hash(password, method='sha256'))
             db.session.add(new_organ)
             db.session.commit()
