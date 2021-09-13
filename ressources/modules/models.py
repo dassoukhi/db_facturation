@@ -88,6 +88,7 @@ class Client(db.Model):
             'telephone': self.telephone,
             'site_internet': self.site_internet,
             'created': self.created,
+            'organisation_id': self.organisation_id,
             'factures': [f.serialize() for f in self.factures]
         }
 
@@ -130,6 +131,8 @@ class Facture(db.Model):
             'date_debut': self.date_debut,
             'description': self.description,
             'created': self.created,
+            'client_id': self.client_id,
+            'organisation_id': self.organisation_id,
             'articles': [a.serialize() for a in self.articles]
         }
 
