@@ -104,13 +104,15 @@ class Facture(db.Model):
     description = db.Column(db.Text())
     created = db.Column(db.DateTime, default=datetime.utcnow)
     client_id = db.Column(db.Integer, db.ForeignKey('client.id'),
+                          nullable=False),
+    client_name = db.Column(db.String(50, nullable=False),
                           nullable=False)
     organisation_id = db.Column(db.Integer, db.ForeignKey('organisation.id'),
                           nullable=False)
     articles = db.relationship('Article', backref='facture', lazy=True)
 
 
-    def __init__(self, num_facture, devise, date_echeance, date_debut, description, client_id,client_name,  organisation_id):
+    def __init__(self, num_facture, devise, date_echeance, date_debut, description, client_id, client_name,  organisation_id):
         self.num_facture = num_facture
         self.devise = devise
         self.date_echeance = date_echeance
