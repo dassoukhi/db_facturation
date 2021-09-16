@@ -370,7 +370,7 @@ def getFactures():
             else:
                 return make_response(jsonify({"error": "Attribut organisation_id required"}), 404)
 
-            facture = Facture(num_facture, devise, date_echeance, date_debut, description, client_id, organisation_id)
+            facture = Facture(num_facture, devise, date_echeance, date_debut, description, client_id, client_name, organisation_id)
 
             try:
                 db.session.add(facture)
