@@ -334,7 +334,7 @@ def getFactures():
         return jsonify([c.serialize() for c in factures])
     if request.method == "POST":
         request_data = request.get_json()
-        num_facture, devise, date_echeance, date_debut, description, client_id, organisation_id = None, None, None, None, None, None, None
+        num_facture, devise, date_echeance, date_debut, description, client_id, client_name, organisation_id = None, None, None, None, None, None, None, None
         print(num_facture, devise, date_echeance, date_debut, description, 1)
         print(request_data)
         if request_data:
@@ -359,6 +359,11 @@ def getFactures():
                 client_id = request_data['client_id']
             else:
                 return make_response(jsonify({"error": "Attribut client_id required"}), 404)
+
+            if 'client_name' in request_data:
+                client_name = request_data['client_name']
+            else:
+                return make_response(jsonify({"error": "Attribut client_name required"}), 404)
 
             if 'organisation_id' in request_data:
                 organisation_id = request_data['organisation_id']

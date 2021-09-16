@@ -110,13 +110,14 @@ class Facture(db.Model):
     articles = db.relationship('Article', backref='facture', lazy=True)
 
 
-    def __init__(self, num_facture, devise, date_echeance, date_debut, description, client_id, organisation_id):
+    def __init__(self, num_facture, devise, date_echeance, date_debut, description, client_id,client_name,  organisation_id):
         self.num_facture = num_facture
         self.devise = devise
         self.date_echeance = date_echeance
         self.date_debut = date_debut
         self.description = description
         self.client_id = client_id
+        self.client_name = client_name
         self.organisation_id = organisation_id
 
     def __repr__(self):
@@ -132,7 +133,7 @@ class Facture(db.Model):
             'description': self.description,
             'created': self.created,
             'client_id': self.client_id,
-            'client_name': Client.query.get_or_404(self.client_id),
+            'client_name': self.client_name,
             'organisation_id': self.organisation_id,
             'articles': [a.serialize() for a in self.articles]
         }
