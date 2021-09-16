@@ -436,7 +436,7 @@ def getArticles():
         return jsonify([c.serialize() for c in articles])
     if request.method == "POST":
         request_data = request.get_json()
-        description, quantite, prix, total, taxe, facture_id = None, None, None, None, None
+        description, quantite, prix, total, taxe, facture_id = None, None, None, None, None, None
         print(description, quantite, prix, total, taxe)
         print(request_data)
         if request_data:
