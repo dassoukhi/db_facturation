@@ -105,8 +105,7 @@ class Facture(db.Model):
     created = db.Column(db.DateTime, default=datetime.utcnow)
     client_id = db.Column(db.Integer, db.ForeignKey('client.id'),
                           nullable=False),
-    client_name = db.Column(db.String(50, nullable=False),
-                          nullable=False)
+    client_name = db.Column(db.String(50), nullable=False),
     organisation_id = db.Column(db.Integer, db.ForeignKey('organisation.id'),
                           nullable=False)
     articles = db.relationship('Article', backref='facture', lazy=True)
