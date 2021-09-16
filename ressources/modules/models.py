@@ -132,7 +132,7 @@ class Facture(db.Model):
             'description': self.description,
             'created': self.created,
             'client_id': self.client_id,
-            'client_name': Client(self.client_id),
+            'client_name': Client.query.get_or_404(self.client_id),
             'organisation_id': self.organisation_id,
             'articles': [a.serialize() for a in self.articles]
         }
