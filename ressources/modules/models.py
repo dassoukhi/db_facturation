@@ -105,7 +105,7 @@ class Facture(db.Model):
     description = db.Column(db.Text())
     total = db.Column(db.String, nullable=False)
     taxe = db.Column(db.String, nullable=False)
-    HT = db.Column(db.String, nullable=False)
+    ht = db.Column(db.String, nullable=False)
     created = db.Column(db.DateTime, default=datetime.utcnow)
     client_id = db.Column(db.Integer, db.ForeignKey('client.id'), nullable=False)
     client_name = db.Column(db.String(50), nullable=False)
