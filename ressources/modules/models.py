@@ -106,13 +106,14 @@ class Facture(db.Model):
     total = db.Column(db.String, nullable=False)
     taxe = db.Column(db.String, nullable=False)
     ht = db.Column(db.String, nullable=False)
+    etat = db.Column(db.String, nullable=False)
     created = db.Column(db.DateTime, default=datetime.utcnow)
     client_id = db.Column(db.Integer, db.ForeignKey('client.id'), nullable=False)
     client_name = db.Column(db.String(50), nullable=False)
     organisation_id = db.Column(db.Integer, db.ForeignKey('organisation.id'), nullable=False)
     articles = db.relationship('Article', backref='facture', lazy=True)
 
-    def __init__(self, num_facture, devise, date_echeance, date_debut, description, total, taxe, ht, client_id,
+    def __init__(self, num_facture, devise, date_echeance, date_debut, description, total, taxe, ht, etat, client_id,
                  client_name, organisation_id):
         self.num_facture = num_facture
         self.devise = devise
@@ -125,6 +126,7 @@ class Facture(db.Model):
         self.total = total
         self.taxe = taxe
         self.ht = ht
+        self.etat = etat
 
     def __repr__(self):
         return '<id {}>'.format(self.id)
@@ -140,6 +142,7 @@ class Facture(db.Model):
             'total': self.total,
             'taxe': self.taxe,
             'ht': self.ht,
+            'etat': self.etat,
             'created': self.created,
             'client_id': self.client_id,
             'client_name': self.client_name,

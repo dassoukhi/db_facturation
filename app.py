@@ -334,7 +334,7 @@ def getFactures():
         return jsonify([c.serialize() for c in factures])
     if request.method == "POST":
         request_data = request.get_json()
-        num_facture, devise, date_echeance, date_debut, description, client_id, client_name, organisation_id = None, None, None, None, None, None, None, None
+        num_facture, devise, date_echeance, date_debut, description, client_id, total, ht, taxe, etat, client_name, organisation_id = None, None, None, None, None, None, None, None, None, None, None, None
         print(num_facture, devise, date_echeance, date_debut, description, 1)
         print(request_data)
         if request_data:
@@ -375,6 +375,11 @@ def getFactures():
             else:
                 return make_response(jsonify({"error": "Attribut HT required"}), 404)
 
+            if 'etat' in request_data:
+                etat = request_data['etat']
+            else:
+                return make_response(jsonify({"error": "Attribut Etat required"}), 404)
+
             if 'client_name' in request_data:
                 client_name = request_data['client_name']
             else:
@@ -385,7 +390,7 @@ def getFactures():
             else:
                 return make_response(jsonify({"error": "Attribut organisation_id required"}), 404)
 
-            facture = Facture(num_facture=num_facture, devise=devise, date_echeance=date_echeance, date_debut=date_debut, description=description,total=total, taxe=taxe, ht=ht, client_id=client_id, client_name=client_name, organisation_id=organisation_id)
+            facture = Facture(num_facture=num_facture, devise=devise, date_echeance=date_echeance, date_debut=date_debut, description=description,total=total, taxe=taxe, ht=ht,etat=etat, client_id=client_id, client_name=client_name, organisation_id=organisation_id)
 
             try:
                 db.session.add(facture)
@@ -423,7 +428,20 @@ def facture(facture_id):
 
             if 'description' in request_data:
                 description = request_data['description']
-            facture.num_facture, facture.devise, facture.date_echeance, facture.date_debut, facture.description = num_facture, devise, date_echeance, date_debut, description
+
+            if 'total' in request_data:
+                total = request_data['total']
+
+            if 'taxe' in request_data:
+                taxe = request_data['taxe']
+
+            if 'ht' in request_data:
+                ht = request_data['ht']
+
+            if 'etat' in request_data:
+                etat = request_data['etat']
+
+            facture.num_facture, facture.devise, facture.date_echeance, facture.date_debut, facture.description, facture.total, facture.taxe, facture.ht, facture.etat = num_facture, devise, date_echeance, date_debut, description, total, taxe, ht, etat
             try:
                 db.session.commit()
                 return jsonify(facture.serialize())
