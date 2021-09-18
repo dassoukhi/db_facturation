@@ -22,7 +22,8 @@ class Organisation(db.Model):
     factures = db.relationship('Facture', backref='organisation', lazy=True)
     clients = db.relationship('Client', backref='organisation', lazy=True)
 
-    def __init__(self, nom, email, password, adresse="",telephone="", site_internet="", num_registre="", nom_banque="", iban="", tva=0.0):
+    def __init__(self, nom, email, password, adresse="", telephone="", site_internet="", num_registre="", nom_banque="",
+                 iban="", tva=0.0):
         self.nom = nom
         self.adresse = adresse
         self.email = email
@@ -102,14 +103,17 @@ class Facture(db.Model):
     date_echeance = db.Column(db.DateTime, default=datetime.utcnow)
     date_debut = db.Column(db.DateTime, default=datetime.utcnow)
     description = db.Column(db.Text())
+    total = db.Column(db.String, nullable=False)
+    taxe = db.Column(db.String, nullable=False)
+    HT = db.Column(db.String, nullable=False)
     created = db.Column(db.DateTime, default=datetime.utcnow)
     client_id = db.Column(db.Integer, db.ForeignKey('client.id'), nullable=False)
     client_name = db.Column(db.String(50), nullable=False)
     organisation_id = db.Column(db.Integer, db.ForeignKey('organisation.id'), nullable=False)
     articles = db.relationship('Article', backref='facture', lazy=True)
 
-
-    def __init__(self, num_facture, devise, date_echeance, date_debut, description, client_id, client_name,  organisation_id):
+    def __init__(self, num_facture, devise, date_echeance, date_debut, description, total, taxe, HT, client_id,
+                 client_name, organisation_id):
         self.num_facture = num_facture
         self.devise = devise
         self.date_echeance = date_echeance
@@ -118,6 +122,9 @@ class Facture(db.Model):
         self.client_id = client_id
         self.client_name = client_name
         self.organisation_id = organisation_id
+        self.total = total
+        self.taxe = taxe
+        self.HT = HT
 
     def __repr__(self):
         return '<id {}>'.format(self.id)
@@ -130,12 +137,16 @@ class Facture(db.Model):
             'date_echeance': self.date_echeance,
             'date_debut': self.date_debut,
             'description': self.description,
+            'total': self.total,
+            'taxe': self.taxe,
+            'HT': self.HT,
             'created': self.created,
             'client_id': self.client_id,
             'client_name': self.client_name,
             'organisation_id': self.organisation_id,
             'articles': [a.serialize() for a in self.articles]
         }
+
 
 class Article(db.Model):
     __tablename__ = 'article'

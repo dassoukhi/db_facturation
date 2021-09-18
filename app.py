@@ -360,6 +360,21 @@ def getFactures():
             else:
                 return make_response(jsonify({"error": "Attribut client_id required"}), 404)
 
+            if 'total' in request_data:
+                total = request_data['total']
+            else:
+                return make_response(jsonify({"error": "Attribut total required"}), 404)
+
+            if 'taxe' in request_data:
+                taxe = request_data['taxe']
+            else:
+                return make_response(jsonify({"error": "Attribut taxe required"}), 404)
+
+            if 'HT' in request_data:
+                HT = request_data['HT']
+            else:
+                return make_response(jsonify({"error": "Attribut HT required"}), 404)
+
             if 'client_name' in request_data:
                 client_name = request_data['client_name']
             else:
@@ -370,7 +385,7 @@ def getFactures():
             else:
                 return make_response(jsonify({"error": "Attribut organisation_id required"}), 404)
 
-            facture = Facture(num_facture, devise, date_echeance, date_debut, description, client_id, client_name, organisation_id)
+            facture = Facture(num_facture=num_facture, devise=devise, date_echeance=date_echeance, date_debut=date_debut, description=description,total=total, taxe=taxe, HT=HT, client_id=client_id, client_name=client_name, organisation_id=organisation_id)
 
             try:
                 db.session.add(facture)
