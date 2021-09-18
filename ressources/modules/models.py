@@ -112,7 +112,7 @@ class Facture(db.Model):
     organisation_id = db.Column(db.Integer, db.ForeignKey('organisation.id'), nullable=False)
     articles = db.relationship('Article', backref='facture', lazy=True)
 
-    def __init__(self, num_facture, devise, date_echeance, date_debut, description, total, taxe, HT, client_id,
+    def __init__(self, num_facture, devise, date_echeance, date_debut, description, total, taxe, ht, client_id,
                  client_name, organisation_id):
         self.num_facture = num_facture
         self.devise = devise
@@ -124,7 +124,7 @@ class Facture(db.Model):
         self.organisation_id = organisation_id
         self.total = total
         self.taxe = taxe
-        self.HT = HT
+        self.ht = ht
 
     def __repr__(self):
         return '<id {}>'.format(self.id)
@@ -139,7 +139,7 @@ class Facture(db.Model):
             'description': self.description,
             'total': self.total,
             'taxe': self.taxe,
-            'HT': self.HT,
+            'ht': self.ht,
             'created': self.created,
             'client_id': self.client_id,
             'client_name': self.client_name,
