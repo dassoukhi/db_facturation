@@ -196,8 +196,7 @@ def login():  # sourcery no-metrics
 
 
 @app.route("/organisations/register", methods=['POST'])
-def register():  # sourcery no-metrics
-
+def register():
     request_data = request.get_json()
     if request_data:
         email = ''
