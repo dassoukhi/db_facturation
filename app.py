@@ -235,28 +235,6 @@ def register():
     return make_response(jsonify({"error": "Data not found"}), 404)
 
 
-@app.route("/clients/exist", methods=['POST'])
-@cross_origin()
-def existClient():
-    request_data = request.get_json()
-    if request_data:
-        if 'email' in request_data:
-            email = request_data['email']
-        else:
-            return make_response(jsonify({"error": "Attribut email required"}), 404)
-
-        try:
-            find = Client.query.filter_by(email=email).first()
-            if find:
-                return make_response(jsonify({"exist": 'yes'}), 200)
-            else:
-                return make_response(jsonify({"exist": 'no'}), 200)
-        except AssertionError as e:
-            print(str(e))
-            return make_response(jsonify({"error": "something wrong"}), 404)
-    return make_response(jsonify({"error": "Data not found"}), 404)
-
-
 @app.route("/clients", methods=['GET', 'POST'])
 @cross_origin()
 def getClients():
@@ -290,6 +268,11 @@ def getClients():
                 organisation_id = request_data['organisation_id']
             else:
                 return make_response(jsonify({"error": "Attribut organisation_id required"}), 404)
+
+            find = Client.query.filter_by(email=email).first()
+            if find:
+                return jsonify(find.serialize())
+
             client = Client(nom, adresse, email, telephone, site_internet)
             client.organisation_id = int(organisation_id)
             try:
