@@ -297,21 +297,24 @@ def client(client_id):
         if request_data:
             if 'nom' in request_data:
                 nom = request_data['nom']
+                client.nom = nom
             else:
                 return make_response(jsonify({"error": "Attribut nom required"}), 404)
 
             if 'adresse' in request_data:
                 adresse = request_data['adresse']
-
+                client.adresse = adresse
             if 'email' in request_data:
                 email = request_data['email']
+                client.email = email
 
             if 'telephone' in request_data:
                 telephone = request_data['telephone']
+                client.telephone = telephone
 
             if 'site_internet' in request_data:
                 site_internet = request_data['site_internet']
-            client.nom, client.adresse, client.email, client.telephone, client.site_internet = nom, adresse, email, telephone, site_internet
+                client.site_internet = site_internet
             try:
                 db.session.commit()
                 return jsonify(client.serialize())
@@ -421,34 +424,42 @@ def facture(facture_id):
         if request_data:
             if 'num_facture' in request_data:
                 num_facture = request_data['num_facture']
+                facture.num_facture = num_facture
             else:
                 return make_response(jsonify({"error": "Attribut nom required"}), 404)
 
             if 'devise' in request_data:
                 devise = request_data['devise']
+                facture.devise = devise
 
             if 'date_echeance' in request_data:
                 date_echeance = request_data['date_echeance']
+                facture.date_echeance = date_echeance
 
             if 'date_debut' in request_data:
                 date_debut = request_data['date_debut']
+                facture.date_debut = date_debut
 
             if 'description' in request_data:
                 description = request_data['description']
+                facture.description = description
 
             if 'total' in request_data:
                 total = request_data['total']
+                facture.total = total
 
             if 'taxe' in request_data:
                 taxe = request_data['taxe']
+                facture.taxe = taxe
 
             if 'ht' in request_data:
                 ht = request_data['ht']
+                facture.ht = ht
 
             if 'etat' in request_data:
                 etat = request_data['etat']
+                facture.etat = etat
 
-            facture.num_facture, facture.devise, facture.date_echeance, facture.date_debut, facture.description, facture.total, facture.taxe, facture.ht, facture.etat = num_facture, devise, date_echeance, date_debut, description, total, taxe, ht, etat
             try:
                 db.session.commit()
                 return jsonify(facture.serialize())
