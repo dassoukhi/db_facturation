@@ -234,6 +234,28 @@ def register():  # sourcery no-metrics
             return make_response(jsonify({"error": "Authentification failed"}), 404)
     return make_response(jsonify({"error": "Data not found"}), 404)
 
+@app.route("/clients/exist", method='POST')
+@cross_origin()
+def existClient():
+    request_data = request.get_json()
+    if request_data:
+        if 'email' in request_data:
+            email = request_data['email']
+        else:
+            return make_response(jsonify({"error": "Attribut email required"}), 404)
+
+        try:
+            find = Client.query.filter_by(email=email).first()
+            if find:
+                make_response(jsonify({"exist": True}), 200)
+            else:
+                make_response(jsonify({"exist": False}), 200)
+        except AssertionError as e:
+            print(str(e))
+            return make_response(jsonify({"error": "something wrong"}), 404)
+    return make_response(jsonify({"error": "Data not found"}), 404)
+
+
 
 @app.route("/clients", methods=['GET', 'POST'])
 @cross_origin()
