@@ -249,9 +249,9 @@ def existClient():
         try:
             find = Client.query.filter_by(email=email).first()
             if find:
-                make_response(jsonify({"exist": 'yes'}), 200)
+                return make_response(jsonify({"exist": 'yes'}), 200)
             else:
-                make_response(jsonify({"exist": 'no'}), 200)
+                return make_response(jsonify({"exist": 'no'}), 200)
         except AssertionError as e:
             print(str(e))
             return make_response(jsonify({"error": "something wrong"}), 404)
