@@ -235,7 +235,7 @@ def register():
     return make_response(jsonify({"error": "Data not found"}), 404)
 
 
-@app.route("/clients/exist", method=['POST'])
+@app.route("/clients/exist", methods=['POST'])
 @cross_origin()
 def existClient():
     request_data = request.get_json()
