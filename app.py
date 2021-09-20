@@ -186,7 +186,8 @@ def login():  # sourcery no-metrics
             organ = Organisation.query.filter_by(email=email).first()
             if not organ or not check_password_hash(organ.password, password):
                 return make_response(jsonify({"error": "Email et/ou mot de passe incorrect(s)"}), 400)
-            user = {"id": organ.id,"email": organ.email, "name": organ.nom, "siteWeb": organ.site_internet, "phone": organ.telephone, "adress": organ.adresse}
+            user = {"id": organ.id, "email": organ.email, "name": organ.nom, "siteWeb": organ.site_internet,
+                    "phone": organ.telephone, "adress": organ.adresse}
             return jsonify(user)
         except AssertionError as e:
             print(str(e))
@@ -217,7 +218,6 @@ def register():  # sourcery no-metrics
         else:
             return make_response(jsonify({"error": "Attribut password required"}), 404)
 
-
         try:
             organ = Organisation.query.filter_by(email=email).first()
             if organ:
@@ -226,7 +226,8 @@ def register():  # sourcery no-metrics
             db.session.add(new_organ)
             db.session.commit()
             new_organ = Organisation.query.filter_by(email=new_organ.email).first()
-            user = {"id": new_organ.id, "email": new_organ.email, "name": new_organ.nom, "siteWeb": new_organ.site_internet,
+            user = {"id": new_organ.id, "email": new_organ.email, "name": new_organ.nom,
+                    "siteWeb": new_organ.site_internet,
                     "phone": new_organ.telephone, "adress": new_organ.adresse}
             return jsonify(user)
         except AssertionError as e:
@@ -234,7 +235,8 @@ def register():  # sourcery no-metrics
             return make_response(jsonify({"error": "Authentification failed"}), 404)
     return make_response(jsonify({"error": "Data not found"}), 404)
 
-@app.route("/clients/exist", method='POST')
+
+@app.route("/clients/exist", method=['POST'])
 @cross_origin()
 def existClient():
     request_data = request.get_json()
@@ -254,7 +256,6 @@ def existClient():
             print(str(e))
             return make_response(jsonify({"error": "something wrong"}), 404)
     return make_response(jsonify({"error": "Data not found"}), 404)
-
 
 
 @app.route("/clients", methods=['GET', 'POST'])
@@ -412,7 +413,9 @@ def getFactures():
             else:
                 return make_response(jsonify({"error": "Attribut organisation_id required"}), 404)
 
-            facture = Facture(num_facture=num_facture, devise=devise, date_echeance=date_echeance, date_debut=date_debut, description=description,total=total, taxe=taxe, ht=ht,etat=etat, client_id=client_id, client_name=client_name, organisation_id=organisation_id)
+            facture = Facture(num_facture=num_facture, devise=devise, date_echeance=date_echeance,
+                              date_debut=date_debut, description=description, total=total, taxe=taxe, ht=ht, etat=etat,
+                              client_id=client_id, client_name=client_name, organisation_id=organisation_id)
 
             try:
                 db.session.add(facture)
