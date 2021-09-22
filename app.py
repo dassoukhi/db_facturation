@@ -421,12 +421,11 @@ def facture(facture_id):
     if request.method == "PUT":
         facture = Facture.query.get_or_404(facture_id)
         request_data = request.get_json()
+        print('facture find :', facture, "requestData :", request_data)
         if request_data:
             if 'num_facture' in request_data:
                 num_facture = request_data['num_facture']
                 facture.num_facture = num_facture
-            else:
-                return make_response(jsonify({"error": "Attribut nom required"}), 404)
 
             if 'devise' in request_data:
                 devise = request_data['devise']
