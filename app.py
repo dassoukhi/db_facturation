@@ -118,38 +118,42 @@ def organisation(organisation_id):
         if request_data:
             if 'nom' in request_data:
                 nom = request_data['nom']
-            else:
-                make_response(jsonify({"error": "Attribut nom required"}), 404)
+                organ.nom = nom
 
             if 'adresse' in request_data:
                 adresse = request_data['adresse']
+                organ.adresse = adresse
 
             if 'email' in request_data:
                 email = request_data['email']
+                organ.email = email
 
             if 'password' in request_data:
                 password = request_data['password']
-            else:
-                make_response(jsonify({"error": "Attribut nom required"}), 404)
+                organ.password = password
 
             if 'telephone' in request_data:
                 telephone = request_data['telephone']
-
+                organ.telephone = telephone
             if 'num_registre' in request_data:
                 num_registre = request_data['num_registre']
+                organ.num_registre = num_registre
 
             if 'nom_banque' in request_data:
                 nom_banque = request_data['nom_banque']
+                organ.nom_banque = nom_banque
 
             if 'iban' in request_data:
                 iban = request_data['iban']
+                organ.iban = iban
 
             if 'tva' in request_data:
                 tva = request_data['tva']
+                organ.tva = tva
 
             if 'site_internet' in request_data:
                 site_internet = request_data['site_internet']
-            organ.nom, organ.adresse, organ.email, organ.telephone, organ.num_registre, organ.nom_banque, organ.iban, organ.tva, organ.site_internet, organ.password = nom, adresse, email, telephone, num_registre, nom_banque, iban, tva, site_internet, password
+                organ.site_internet = site_internet
             try:
                 db.session.commit()
                 return jsonify(organ.serialize())
@@ -542,21 +546,23 @@ def articles(article_id):
         if request_data:
             if 'description' in request_data:
                 description = request_data['description']
-            else:
-                return make_response(jsonify({"error": "Attribut description required"}), 404)
+                article.description = description
 
             if 'quantite' in request_data:
                 quantite = request_data['quantite']
+                article.quantite = quantite
 
             if 'prix' in request_data:
                 prix = request_data['prix']
+                article.prix = prix
 
             if 'total' in request_data:
                 total = request_data['total']
+                article.total = total
 
             if 'taxe' in request_data:
                 taxe = request_data['taxe']
-            article.description, article.quantite, article.prix, article.total, article.taxe = description, quantite, prix, total, taxe
+                article.taxe = taxe
             try:
                 db.session.commit()
                 return jsonify(article.serialize())
