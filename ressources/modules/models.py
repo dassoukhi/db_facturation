@@ -44,7 +44,6 @@ class Organisation(db.Model):
             'nom': self.nom,
             'adresse': self.adresse,
             'email': self.email,
-            'password': self.password,
             'telephone': self.telephone,
             'num_registre': self.num_registre,
             'nom_banque': self.nom_banque,
