@@ -7,9 +7,8 @@ from dotenv import load_dotenv
 import click
 from flask.cli import with_appcontext
 from werkzeug.security import check_password_hash, generate_password_hash
-from mailSender import  emailSender
+from mailSender import  emailSender, mailBody
 
-load_dotenv()
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL'].replace("://", "ql://", 1)
@@ -173,7 +172,6 @@ def organisation(organisation_id):
 @app.route("/organisations/login", methods=['POST'])
 def login():  # sourcery no-metrics
 
-    emailSender('from flask', 'server')
     request_data = request.get_json()
     if request_data:
         email = ''
@@ -240,6 +238,27 @@ def register():
             return make_response(jsonify({"error": "Authentification failed"}), 404)
     return make_response(jsonify({"error": "Data not found"}), 404)
 
+@app.route("/organisations/forgot", methods=['POST'])
+def forgot():
+    request_data = request.get_json()
+    if request_data:
+        email = ''
+        if 'email' in request_data:
+            email = request_data['email']
+        else:
+            return make_response(jsonify({"error": "Attribut email required"}), 404)
+
+        try:
+            organ = Organisation.query.filter_by(email=email).first()
+            if not organ:
+                return make_response(jsonify({"error": "Utilisateur non inscrit"}), 400)
+
+            emailSender(email,mailBody(organ.id, organ.nom), 'Dassolution | Réinitialisation de votre mot de passe')
+            return make_response(jsonify({"ok": "Email sended"}), 200)
+        except AssertionError as e:
+            print(str(e))
+            return make_response(jsonify({"error": "Authentification failed"}), 404)
+    return make_response(jsonify({"error": "Data not found"}), 404)
 
 @app.route("/clients", methods=['GET', 'POST'])
 @cross_origin()
