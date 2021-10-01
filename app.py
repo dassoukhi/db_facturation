@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 import click
 from flask.cli import with_appcontext
 from werkzeug.security import check_password_hash, generate_password_hash
+from mailSender import  emailSender
 
 load_dotenv()
 
@@ -172,6 +173,7 @@ def organisation(organisation_id):
 @app.route("/organisations/login", methods=['POST'])
 def login():  # sourcery no-metrics
 
+    emailSender('from flask', 'server')
     request_data = request.get_json()
     if request_data:
         email = ''
