@@ -18,15 +18,16 @@ def mailBody(id, name):
     expiredDate = dt_string.strftime('%d/%m/%Y hour:%M:%S').replace('hour', str(nextHour))
     characters = string.ascii_letters + string.digits
     token = ''.join(random.choice(characters) for i in range(20))
-    return print(f"Bonjour {name}, \n\nUne demande de réinitialisation du mot de passe de votre compte Dassolution a "
+    return (f"Bonjour {name}, \n\nUne demande de réinitialisation du mot de passe de votre compte Dassolution a "
                  f"été effectuée le {dt_string.strftime('%d/%m/%Y %H:%M:%S')}.\n"
                  f"Il vous suffit de cliquer sur le lien ci-après pour accéder au formulaire vous permettant de "
-                 f"définir votre nouveau mot de passe : www.dassolution/organisations/reset/{id}/{token}\n\n"
+                 f"définir votre nouveau mot de passe : https://www.dassolution/organisations/reset/{id}/{token}\n\n"
                  f"Ce lien de réinitialisation de mot de passe est valable jusqu'au {expiredDate}."
                  f"\n\nBien cordialement\nService Support Dassolution")
 
 
 def emailSender(mailReceive,body, sujet):
+    print(body)
     server = smtplib.SMTP('smtp.gmail.com', 587)
     server.ehlo()
     server.starttls()
@@ -51,4 +52,4 @@ def emailSender(mailReceive,body, sujet):
 
 
 if __name__ == '__main__':
-    emailSender('heyy', 'Hey')
+    emailSender('maladealpha@gmail.com', mailBody(1, 'dass'),'Dassolution | Réinitialisation de votre mot de passe')
