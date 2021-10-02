@@ -50,7 +50,7 @@ def mailBody(id, name):
                 <td width="670" align="center"  bgcolor="#000131"><h1>Dassolution</h1></td>
               </tr>
               <tr>
-                <td width="670" align="right" bgcolor="#000131"><p>November 2017</p></td>
+                <td width="670" align="right" bgcolor="#000131"><p>"""+str(dt_string.year)+"""</p></td>
               </tr>
             </table>
           </td>
