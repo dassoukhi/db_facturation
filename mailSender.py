@@ -66,7 +66,7 @@ def mailBody(id, name):
                         <p>Il vous suffit de cliquer sur le bouton ci-dessous pour accéder au formulaire vous permettant de définir votre nouveau mot de passe :</p><br>
 
                         <div id="divButton">
-                            <a href='www.dassolution/organisations/reset/"""+str(id) +'/'+ token+"""'>
+                            <a href='http://www.dassolution.fr/reset/"""+str(id) +'/'+ token+"""'>
                                 <button>Définir mon nouveau mot de passe</button>
                             </a>
                         </div><br>
