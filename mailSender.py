@@ -62,7 +62,7 @@ def mailBody(id, name):
                 <td width="600" height="500"  valign="top" bgcolor="#eee" cellpadding="30" >
                     <div>
                         <p>Bonjour """+name+""",</p> <br>
-                        <p>Une demande de réinitialisation du mot de passe de votre compte Ynov a été effectuée le """+dt_string.strftime('%d/%m/%Y %H:%M:%S')+""".</p><br>
+                        <p>Une demande de réinitialisation du mot de passe de votre compte a été effectuée le """+dt_string.strftime('%d/%m/%Y %H:%M:%S')+""".</p><br>
                         <p>Il vous suffit de cliquer sur le bouton ci-dessous pour accéder au formulaire vous permettant de définir votre nouveau mot de passe :</p><br>
 
                         <div id="divButton">
