@@ -122,4 +122,4 @@ def emailSender(mailReceive,text, html, sujet):
 
 if __name__ == '__main__':
     text, html = mailBody(1, 'Saleh')
-    emailSender('dassbosch50@gmail.com', text, html,'Dassolution | Réinitialisation de votre mot de passe')
+    emailSender('maladealpha@gmail.com', text, html,'Dassolution | Réinitialisation de votre mot de passe')

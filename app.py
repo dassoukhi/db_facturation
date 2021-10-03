@@ -253,6 +253,7 @@ def forgot():
             if not organ:
                 return make_response(jsonify({"error": "Utilisateur non inscrit"}), 400)
             token = organ.get_token()
+            print('token: ', token)
             text, html = mailBody(token, organ.nom)
             emailSender(mailReceive=email, text=text, html=html, sujet='Dassolution | Réinitialisation de votre mot de passe')
             return make_response(jsonify({"ok": "Email sended"}), 200)
