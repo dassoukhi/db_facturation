@@ -38,7 +38,7 @@ def mailBody(id, name):
       h5 {margin: 0 0 0.8em 0;}
         h5 {font-size: 18px; color: #444444 !important; font-family: Arial, Helvetica, sans-serif; }
       p {font-size: 14px; color: #444444 !important; font-family: "Lucida Grande", "Lucida Sans", "Lucida Sans Unicode", sans-serif; line-height: 1.5;}
-      button {background-color: #fb2e59; border: none; border-radius: 5px; height: 50px; width: 400px; color: white;}
+      button {background-color: #fb2e59; border: none; border-radius: 5px; height: 50px; width: 400px; color: white; cursor: pointer;}
        </style>
       <body>
     <table width="100%" cellpadding="0" cellspacing="0" bgcolor="e4e4e4"><tr><td>
