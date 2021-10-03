@@ -1,3 +1,4 @@
+itsdangerous
 werkzeug
 Flask
 flask_migrate
