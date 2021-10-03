@@ -129,8 +129,7 @@ def organisation(organisation_id):
                 organ.email = email
 
             if 'password' in request_data:
-                password = request_data['password']
-                organ.password = password
+                return make_response(jsonify({"error": "Access denied, you can request password"}), 404)
 
             if 'telephone' in request_data:
                 telephone = request_data['telephone']
@@ -239,6 +238,7 @@ def register():
     return make_response(jsonify({"error": "Data not found"}), 404)
 
 @app.route("/organisations/forgot", methods=['POST'])
+@cross_origin()
 def forgot():
     request_data = request.get_json()
     if request_data:
@@ -260,7 +260,37 @@ def forgot():
             return make_response(jsonify({"error": "Authentification failed"}), 404)
     return make_response(jsonify({"error": "Data not found"}), 404)
 
-@app.route("/clients", methods=['GET', 'POST'])
+@app.route("/organisations/reset/<token>", methods=['GET', 'POST'])
+def resetPassword(token):
+    if request.method == "GET":
+        organ = Organisation.verify_token(token)
+        if organ is None:
+            return make_response(jsonify({"error": "Token invalide ou déja expiré, Veuillez ressayer s'il vous plaît."}), 404)
+        return make_response(jsonify({"success": "OK"}), 200)
+
+    if request.method == "POST":
+        organ = Organisation.verify_token(token)
+        if organ is None:
+            return make_response(
+                jsonify({"error": "Token invalide ou déja expiré, Veuillez ressayer s'il vous plaît."}), 404)
+
+        request_data = request.get_json()
+        if 'password' in request_data:
+            password = request_data['password']
+        else:
+            return make_response(jsonify({"error": "Attribut password required"}), 404)
+
+        organ.password = generate_password_hash(password, method='sha256')
+        try:
+            db.session.commit()
+            return jsonify(organ.serialize())
+        except AssertionError as e:
+            print(str(e))
+            return make_response(jsonify({"error": "modification failed"}), 404)
+    return make_response(jsonify({"error": "Data not found"}), 404)
+
+
+@app.route("/clients", methods=['POST'])
 @cross_origin()
 def getClients():
     if request.method == "GET":

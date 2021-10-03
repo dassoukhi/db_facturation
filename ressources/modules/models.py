@@ -1,5 +1,6 @@
-from app import db
+from app import db, app
 from datetime import datetime
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 
 assert isinstance(db.Model, object)
 
@@ -37,6 +38,19 @@ class Organisation(db.Model):
 
     def __repr__(self):
         return '<id {}>'.format(self.id)
+
+    def get_token(self, expires_sec=3600):
+        serial = Serializer(app.config['SECRET_KEY'], expires_in=expires_sec)
+        return serial.dumps({'id': self.id}).decode('utf-8')
+
+    @staticmethod
+    def verify_token(token):
+        serial = Serializer(app.config['SECRET_KEY'])
+        try:
+            organ_id = serial.loads(token)['id']
+        except:
+            return None
+        return Organisation.query.get(organ_id)
 
     def serialize(self):
         return {
