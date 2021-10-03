@@ -238,7 +238,6 @@ def register():
     return make_response(jsonify({"error": "Data not found"}), 404)
 
 @app.route("/organisations/forgot", methods=['POST'])
-@cross_origin()
 def forgot():
     request_data = request.get_json()
     if request_data:

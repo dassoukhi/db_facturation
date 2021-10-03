@@ -15,7 +15,7 @@ def mailBody(token, name):
         nextHour = '00'
     expiredDate = dt_string.strftime('%d/%m/%Y hour:%M:%S').replace('hour', str(nextHour))
 
-    text = "Bonjour "+name+",\nUne demande de réinitialisation du mot de passe de votre compte a été effectuée le "+dt_string.strftime('%d/%m/%Y %H:%M:%S')+".\nIl vous suffit de cliquer sur le bouton ci-dessous pour accéder au formulaire vous permettant de définir votre nouveau mot de passe :\nhttp://www.dassolution.fr/reset_password/"+str(token) + "\n\nCe lien de réinitialisation de mot de passe est valable jusqu'au "+str(expiredDate)+".\nSi vous n'avez pas effectué cette demande, veuillez supprimer ce message.\n\nBien cordialement\nService Support Dassolution"
+    text = "Bonjour "+name+",\nUne demande de réinitialisation du mot de passe de votre compte a été effectuée le "+dt_string.strftime('%d/%m/%Y %H:%M:%S')+".\nIl vous suffit de cliquer sur le bouton ci-dessous pour accéder au formulaire vous permettant de définir votre nouveau mot de passe :\nhttp://www.dassolution.fr/reset_password/"+ token + "\n\nCe lien de réinitialisation de mot de passe est valable jusqu'au "+str(expiredDate)+".\nSi vous n'avez pas effectué cette demande, veuillez supprimer ce message.\n\nBien cordialement\nService Support Dassolution"
 
     html = """\
     <!DOCTYPE html
@@ -66,7 +66,7 @@ def mailBody(token, name):
                         <p>Il vous suffit de cliquer sur le bouton ci-dessous pour accéder au formulaire vous permettant de définir votre nouveau mot de passe :</p><br>
 
                         <div id="divButton">
-                            <a href='http://www.dassolution.fr/reset_password/"""+str(token) + """'>
+                            <a href='http://www.dassolution.fr/reset_password/"""+token + """'>
                                 <button>Définir mon nouveau mot de passe</button>
                             </a>
                         </div><br>
@@ -121,5 +121,6 @@ def emailSender(mailReceive,text, html, sujet):
 
 
 if __name__ == '__main__':
-    text, html = mailBody(1, 'Saleh')
+    token = "eyJhbGciOiJIUzUxMiIsImlhdCI6MTYzMzI5NjMzNiwiZXhwIjoxNjMzMjk5OTM2fQ.eyJpZCI6Nn0.eby9BMaZqp01frMiTB6alz7tbc3rkLxXA-kmQnmslgy5OEMjvUn7qNQ6ib-G95m2cQa4oeTunK5ur08ALderoQ"
+    text, html = mailBody(token, 'Saleh')
     emailSender('maladealpha@gmail.com', text, html,'Dassolution | Réinitialisation de votre mot de passe')
