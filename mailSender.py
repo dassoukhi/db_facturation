@@ -4,21 +4,18 @@ from email.mime.text import MIMEText
 from dotenv import load_dotenv
 import os
 from datetime import datetime
-import string
-import random
 
 load_dotenv()
 EMAIL = 'dassolution.service@gmail.com'
 
-def mailBody(id, name):
+def mailBody(token, name):
     dt_string = datetime.now()
     nextHour = dt_string.hour + 1
     if nextHour == 24:
         nextHour = '00'
     expiredDate = dt_string.strftime('%d/%m/%Y hour:%M:%S').replace('hour', str(nextHour))
-    characters = string.ascii_letters + string.digits
-    token = ''.join(random.choice(characters) for i in range(20))
-    text = "Bonjour "+name+",\nUne demande de réinitialisation du mot de passe de votre compte a été effectuée le "+dt_string.strftime('%d/%m/%Y %H:%M:%S')+".\nIl vous suffit de cliquer sur le bouton ci-dessous pour accéder au formulaire vous permettant de définir votre nouveau mot de passe :\nhttp://www.dassolution.fr/reset/"+str(id) +'/'+ token+"\n\nCe lien de réinitialisation de mot de passe est valable jusqu'au "+str(expiredDate)+".\nSi vous n'avez pas effectué cette demande, veuillez supprimer ce message.\n\nBien cordialement\nService Support Dassolution"
+
+    text = "Bonjour "+name+",\nUne demande de réinitialisation du mot de passe de votre compte a été effectuée le "+dt_string.strftime('%d/%m/%Y %H:%M:%S')+".\nIl vous suffit de cliquer sur le bouton ci-dessous pour accéder au formulaire vous permettant de définir votre nouveau mot de passe :\nhttp://www.dassolution.fr/reset_password/"+str(token) + "\n\nCe lien de réinitialisation de mot de passe est valable jusqu'au "+str(expiredDate)+".\nSi vous n'avez pas effectué cette demande, veuillez supprimer ce message.\n\nBien cordialement\nService Support Dassolution"
 
     html = """\
     <!DOCTYPE html
@@ -69,7 +66,7 @@ def mailBody(id, name):
                         <p>Il vous suffit de cliquer sur le bouton ci-dessous pour accéder au formulaire vous permettant de définir votre nouveau mot de passe :</p><br>
 
                         <div id="divButton">
-                            <a href='http://www.dassolution.fr/reset/"""+str(id) +'/'+ token+"""'>
+                            <a href='http://www.dassolution.fr/reset_password/"""+str(token) + """'>
                                 <button>Définir mon nouveau mot de passe</button>
                             </a>
                         </div><br>
