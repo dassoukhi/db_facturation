@@ -47,7 +47,7 @@ def mailBody(id, name):
           <td>
             <table id="header" cellpadding="10" cellspacing="0" align="center" bgcolor="8fb3e9">
               <tr>
-                <td width="670" align="center"  bgcolor="#000131"><h1>Dassolution</h1></td>
+                <td width="670" align="center"  bgcolor="#000131"><h1>Dass~olution</h1></td>
               </tr>
               <tr>
                 <td width="670" align="right" bgcolor="#000131"><p>"""+str(dt_string.year)+"""</p></td>
