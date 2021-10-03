@@ -252,8 +252,8 @@ def forgot():
             organ = Organisation.query.filter_by(email=email).first()
             if not organ:
                 return make_response(jsonify({"error": "Utilisateur non inscrit"}), 400)
-
-            emailSender(email, mailBody(organ.id, organ.nom), 'Dassolution | Réinitialisation de votre mot de passe')
+            text, html = mailBody(organ.id, organ.nom)
+            emailSender(mailReceive=email, text=text, html=html, sujet='Dassolution | Réinitialisation de votre mot de passe')
             return make_response(jsonify({"ok": "Email sended"}), 200)
         except AssertionError as e:
             print(str(e))

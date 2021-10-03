@@ -18,18 +18,21 @@ def mailBody(id, name):
     expiredDate = dt_string.strftime('%d/%m/%Y hour:%M:%S').replace('hour', str(nextHour))
     characters = string.ascii_letters + string.digits
     token = ''.join(random.choice(characters) for i in range(20))
+    text = "Bonjour "+name+",\nUne demande de réinitialisation du mot de passe de votre compte a été effectuée le "+dt_string.strftime('%d/%m/%Y %H:%M:%S')+".\nIl vous suffit de cliquer sur le bouton ci-dessous pour accéder au formulaire vous permettant de définir votre nouveau mot de passe :\nhttp://www.dassolution.fr/reset/"+str(id) +'/'+ token+"\n\nCe lien de réinitialisation de mot de passe est valable jusqu'au "+str(expiredDate)+".\nSi vous n'avez pas effectué cette demande, veuillez supprimer ce message.\n\nBien cordialement\nService Support Dassolution"
+
     html = """\
     <!DOCTYPE html
     <html>
       <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-       <title>Tutsplus Email Newsletter</title>
+       <title>Dass~olution</title>
        <style type="text/css">
         a {color: #d80a3e;}
       body, #header h1, #header h2, p {margin: 0; padding: 0;}
-      div {padding: 30; height: 100vh; margin: 20px;}
-      #divButton {display: flex; justify-content: center;  align-items: center; height: 50px;}
-      #bye {display: flex; justify-content: flex-end;  align-items: center; height: 40px; margin-right: -15px;}
+      body {height: 100vh; width: 100vw;}
+      div {padding: 30; margin: 20px;}
+      #divButton {position: relative; display: flex; justify-content: center;  align-items: center;}
+      #bye {display: flex; justify-content: flex-end;  align-items: center; height: 40px; padding: 0; margin: 0;}
       #main {border: 1px solid #cfcece;}
       img {display: block;}
       #top-message p, #bottom p {color: #3f4042; font-size: 12px; font-family: Arial, Helvetica, sans-serif; }
@@ -38,11 +41,11 @@ def mailBody(id, name):
       h5 {margin: 0 0 0.8em 0;}
         h5 {font-size: 18px; color: #444444 !important; font-family: Arial, Helvetica, sans-serif; }
       p {font-size: 14px; color: #444444 !important; font-family: "Lucida Grande", "Lucida Sans", "Lucida Sans Unicode", sans-serif; line-height: 1.5;}
-      button {background-color: #fb2e59; border: none; border-radius: 5px; height: 50px; width: 400px; color: white; cursor: pointer;}
+      button {background-color: #fb2e59; border: none; border-radius: 10px; height: 50px; width: 400px; color: white; cursor: pointer;}
        </style>
       <body>
     <table width="100%" cellpadding="0" cellspacing="0" bgcolor="e4e4e4"><tr><td>
-    <table id="main" width="100vw" align="center" cellpadding="0" cellspacing="15" bgcolor="ffffff">
+    <table id="main" align="center" cellpadding="0" cellspacing="15" bgcolor="ffffff">
         <tr>
           <td>
             <table id="header" cellpadding="10" cellspacing="0" align="center" bgcolor="8fb3e9">
@@ -93,10 +96,10 @@ def mailBody(id, name):
     </body>
     </html>
     """
-    return html
+    return text, html
 
 
-def emailSender(mailReceive,body, sujet):
+def emailSender(mailReceive,text, html, sujet):
     server = smtplib.SMTP('smtp.gmail.com', 587)
     server.ehlo()
     server.starttls()
@@ -109,11 +112,11 @@ def emailSender(mailReceive,body, sujet):
     msg['From'] = EMAIL
     msg['To'] = mailReceive
 
-    html = body
-
-    part1 = MIMEText(html, 'html')
+    part1 = MIMEText(text, 'plain')
+    part2 = MIMEText(html, 'html')
 
     msg.attach(part1)
+    msg.attach(part2)
 
     server.sendmail(EMAIL, mailReceive, msg.as_string())
     print("envoie reussi")
@@ -121,4 +124,5 @@ def emailSender(mailReceive,body, sujet):
 
 
 if __name__ == '__main__':
-    emailSender('maladealpha@gmail.com', mailBody(1, 'Saleh'),'Dassolution | Réinitialisation de votre mot de passe')
+    text, html = mailBody(1, 'Saleh')
+    emailSender('dassbosch50@gmail.com', text, html,'Dassolution | Réinitialisation de votre mot de passe')
